@@ -1,0 +1,89 @@
+version: '3.8'
+services:
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mlflow
+      MYSQL_USER: mlflow
+      MYSQL_PASSWORD: mlflow
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  mlflow:
+    build:
+      context: ./mlflow-server
+    environment:
+      AWS_ACCESS_KEY_ID: q63Oq77uflrb5Q0VuBKJ
+      AWS_SECRET_ACCESS_KEY: kV3UFQeqxV7kMMGPo5B8abdMopjPPE2cO6Ccc1B9
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+      - minio
+  bentoml-model:
+    build: ./bentoml-model-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mlflow
+
+  bentoml-embedding:
+    build: ./bentoml-embedding-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mlflow
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - qdrant
+      # - bentoml
+    env_file:
+      - ./api/.env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - BENTOML_URL=http://bentoml:3000
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - COLLECTION_NAME=rag-docs
+  # streamlit:
+  #   image: python:3.10-slim
+  #   working_dir: /app
+  #   volumes:
+  #     - ./streamlit_app:/app
+  #   ports:
+  #     - "8501:8501"
+  #   command: bash -c "pip install -r requirements.txt && streamlit run app.py --server.port 8501 --server.address 0.0.0.0"
+  #   depends_on:
+  #     - api
+
+volumes:
+  mysql_data:
+  minio_data:
