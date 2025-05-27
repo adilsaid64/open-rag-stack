@@ -44,35 +44,29 @@ services:
     depends_on:
       - mysql
       - minio
-  bentoml-model:
-    build: ./bentoml-model-service
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mlflow
+      
+  # bentoml-model:
+  #   build: ./bento-model-service
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - mlflow
 
   bentoml-embedding:
-    build: ./bentoml-embedding-service
+    build: ./bento-embedding-service
     ports:
       - "3001:3001"
     depends_on:
       - mlflow
-
   api:
     build: ./api
     ports:
       - "8000:8000"
     depends_on:
       - qdrant
-      # - bentoml
+      - bentoml-embedding
     env_file:
       - ./api/.env
-    environment:
-      - QDRANT_URL=http://qdrant:6333
-      - BENTOML_URL=http://bentoml:3000
-      - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - EMBEDDING_MODEL=all-MiniLM-L6-v2
-      - COLLECTION_NAME=rag-docs
   # streamlit:
   #   image: python:3.10-slim
   #   working_dir: /app

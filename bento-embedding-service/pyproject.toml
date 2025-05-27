@@ -1,0 +1,10 @@
+[project]
+name = "bento-embedding-service"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bentoml>=1.4.15",
+    "sentence-transformers>=4.1.0",
+]
