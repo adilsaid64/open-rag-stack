@@ -10,6 +10,8 @@ RUN uv sync --verbose
 
 RUN uv run bentoml build
 
-EXPOSE 3001
+EXPOSE 3000
 
-CMD ["uv", "run", "bentoml", "serve", "embedding_service:latest", "--port", "3001"]
+CMD ["uv" ,"run", "bentoml", "serve", "generation_service:latest", "--port", "3000"]
+
+

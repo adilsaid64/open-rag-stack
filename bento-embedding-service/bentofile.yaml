@@ -1,0 +1,6 @@
+service: service:EmbeddingService
+
+python:
+  packages:
+    - sentence-transformers
+    - bentoml

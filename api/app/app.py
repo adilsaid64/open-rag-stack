@@ -1,21 +1,22 @@
 import time
 from typing import Optional
 
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
 from pydantic import BaseModel
 import mlflow
 import uvicorn
 
 from src.rag import RAGPipeline
 from src.utils import logger
-from src.config import MLFLOW_TRACKING_URI, EMBEDDING_MODEL
+from src.config import MLFLOW_TRACKING_URI
 
 app = FastAPI(title="RAG API", description="Retrieval-Augmented Generation API")
 rag = RAGPipeline()
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
-GENERATION_MODEL = "distilgpt2"  
+GENERATION_MODEL = "EleutherAI/gpt-neo-1.3B"  
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 class IngestRequest(BaseModel):
     text: str

@@ -1,0 +1,7 @@
+service: service:GenerationService
+
+python:
+  packages:
+    - transformers
+    - torch
+    - bentoml

@@ -44,13 +44,13 @@ services:
     depends_on:
       - mysql
       - minio
-      
-  # bentoml-model:
-  #   build: ./bento-model-service
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - mlflow
+
+  bentoml-model:
+    build: ./bento-model-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mlflow
 
   bentoml-embedding:
     build: ./bento-embedding-service
@@ -67,16 +67,12 @@ services:
       - bentoml-embedding
     env_file:
       - ./api/.env
-  # streamlit:
-  #   image: python:3.10-slim
-  #   working_dir: /app
-  #   volumes:
-  #     - ./streamlit_app:/app
-  #   ports:
-  #     - "8501:8501"
-  #   command: bash -c "pip install -r requirements.txt && streamlit run app.py --server.port 8501 --server.address 0.0.0.0"
-  #   depends_on:
-  #     - api
+  streamlit-app:
+    build: ./streamlit-app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
 
 volumes:
   mysql_data:
