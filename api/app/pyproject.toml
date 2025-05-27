@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "boto3>=1.38.24",
     "fastapi>=0.115.12",
     "mlflow>=2.22.0",
     "pydantic>=2.11.5",

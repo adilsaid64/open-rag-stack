@@ -6,6 +6,6 @@ COPY app/ /app
 
 RUN uv sync --verbose
 
-EXPOSE 8888
+EXPOSE 8000
 
 CMD ["uv", "run", "app.py"]

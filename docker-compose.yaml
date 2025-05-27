@@ -64,7 +64,6 @@ services:
       - "8000:8000"
     depends_on:
       - qdrant
-      - bentoml-embedding
     env_file:
       - ./api/.env
   streamlit-app:
