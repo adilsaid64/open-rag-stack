@@ -1,60 +1,92 @@
-import time
 from typing import Optional
 
 from fastapi import FastAPI
+from fastapi.responses import Response
 from pydantic import BaseModel
-import mlflow
+from prometheus_client import Counter, Histogram, generate_latest
 import uvicorn
 
 from src.rag import RAGPipeline
 from src.utils import logger
-from src.config import MLFLOW_TRACKING_URI
 
 app = FastAPI(title="RAG API", description="Retrieval-Augmented Generation API")
 rag = RAGPipeline()
 
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+QUERY_COUNT = Counter("rag_query_count", "Total number of /query calls")
+INGEST_COUNT = Counter("rag_ingest_count", "Total number of /ingest calls")
+
+RETRIEVAL_LATENCY = Histogram("rag_retrieval_latency_seconds", "Time to retrieve context")
+GENERATION_LATENCY = Histogram("rag_generation_latency_seconds", "Time to generate response")
+INGEST_LATENCY = Histogram("rag_ingest_latency_seconds", "Time to ingest documents")
+
+RETRIEVAL_EMPTY_COUNT = Counter("rag_retrieval_empty_count", "Retrieval returned no results")
+GENERATION_FAILURES = Counter("rag_generation_failures_total", "Total generation failures")
+
+PROMPT_TOKENS = Counter("rag_tokens_prompt_total", "Tokens sent to LLM")
+COMPLETION_TOKENS = Counter("rag_tokens_completion_total", "Tokens received from LLM")
 
 GENERATION_MODEL = "EleutherAI/gpt-neo-1.3B"  
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 class IngestRequest(BaseModel):
+    """..."""
     text: str
     metadata: Optional[dict] = None
 
+class IngestResponse(BaseModel):
+    """..."""
+    status: str
+
 class QueryRequest(BaseModel):
+    """..."""
     question: str
     top_k: int = 3
 
+class QueryResponse(BaseModel):
+    answer: str
+
 @app.post("/ingest/")
-def ingest(request: IngestRequest):
-    rag.ingest(request.text, request.metadata)
+def ingest(request: IngestRequest) -> IngestResponse:
+    """..."""
+    INGEST_COUNT.inc()
+    with INGEST_LATENCY.time():
+        rag.ingest(request.text, request.metadata)
     logger.info(f"Document ingested: {request.text[:30]}...")
-    return {"status": "ok"}
+    return IngestResponse(status="ok")
 
 @app.post("/query/")
-def query(request: QueryRequest):
-    # with mlflow.start_run(run_name="rag_query"):
-        # mlflow.log_param("question", request.question)
-        # mlflow.log_param("top_k", request.top_k)
-        # mlflow.log_param("embedding_model", EMBEDDING_MODEL)
-        # mlflow.log_param("generation_model", GENERATION_MODEL)
+def query(request: QueryRequest) -> QueryResponse:
+    """..."""
+    QUERY_COUNT.inc()
 
-    # retrieval_start = time.time()
-    contexts = rag.retrieve(request.question, top_k=request.top_k)
-        # retrieval_time = time.time() - retrieval_start
+    with RETRIEVAL_LATENCY.time():
+        contexts = rag.retrieve(request.question, top_k=request.top_k)
+
+    if not contexts:
+        RETRIEVAL_EMPTY_COUNT.inc()
+
     context = "\n".join(contexts)
-        # mlflow.log_text(context, "context.txt")
-        # mlflow.log_metric("retrieval_time", retrieval_time)
 
-        # generation_start = time.time()
-    answer = rag.generate(request.question, context)
-        # generation_time = time.time() - generation_start
-        # mlflow.log_metric("generation_time", generation_time)
-        # mlflow.log_text(answer, "answer.txt")
+    try:
+        with GENERATION_LATENCY.time():
+            answer = rag.generate(request.question, context)
+
+    except Exception as e:
+        logger.error(f"Generation failed: {e}")
+        GENERATION_FAILURES.inc()
+        return QueryResponse(
+            answer="An error occurred during generation.",
+        )
+
     logger.info(f"Query answered: {request.question[:30]}...")
-    return {"answer": answer} 
+    return QueryResponse(
+        answer=answer,
+    )
 
+@app.get("/metrics")
+def metrics():
+    """..."""
+    return Response(generate_latest(), media_type="text/plain")
 
 if __name__ == "__main__":
     uvicorn.run(app="app:app", host="0.0.0.0", port=8000, log_level="info")

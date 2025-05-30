@@ -3,7 +3,8 @@ import uuid
 from typing import Optional
 
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import PointStruct, Filter, FieldCondition, MatchValue
+from qdrant_client.http.models import PointStruct
+from qdrant_client.http.models import VectorParams, Distance
 
 from .config import QDRANT_URL, COLLECTION_NAME, BENTOML_MODEL_URL, BENTOML_EMBEDDING_URL
 from .utils import logger
@@ -21,9 +22,10 @@ class RAGPipeline:
     def _ensure_collection(self):
         if self.collection_name not in [c.name for c in self.qdrant.get_collections().collections]:
             logger.info(f"Creating Qdrant collection: {self.collection_name}")
+            
             self.qdrant.recreate_collection(
                 collection_name=self.collection_name,
-                vectors_config={"size": 384, "distance": "Cosine"}
+                vectors_config=VectorParams(size=384, distance=Distance(value = "Cosine"))
             )
 
     def get_embedding(self, text: str):
@@ -48,7 +50,7 @@ class RAGPipeline:
             query_vector=embedding,
             limit=top_k
         )
-        return [hit.payload["text"] for hit in hits]
+        return [hit.payload["text"] for hit in hits if hit.payload is not None]
 
     def generate(self, question: str, context: str):
         prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
