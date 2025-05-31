@@ -86,6 +86,3 @@ def query(request: QueryRequest) -> QueryResponse:
 def metrics():
     """..."""
     return Response(generate_latest(), media_type="text/plain")
-
-# if __name__ == "__main__":
-#     uvicorn.run(app="app:app", host="0.0.0.0", port=8000, log_level="info")
