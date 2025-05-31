@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered",
 )
 
-API_URL: str = "http://api:8000"
+RAG_ORCHESTRATOR_URL: str = "http://rag-orchestrator:8000"
 
 
 def extract_keywords(text: str, top_n: int = 3) -> list[str]:
@@ -23,7 +23,7 @@ def post_json(
     endpoint: str, payload: dict[str, Any]
 ) -> tuple[Optional[dict[str, Any]], Optional[str]]:
     try:
-        resp = requests.post(f"{API_URL}{endpoint}", json=payload)
+        resp = requests.post(f"{RAG_ORCHESTRATOR_URL}{endpoint}", json=payload)
         resp.raise_for_status()
         return resp.json(), None
     except requests.RequestException as e:

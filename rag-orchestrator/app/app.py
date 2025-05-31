@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel
 from prometheus_client import Counter, Histogram, generate_latest
@@ -28,6 +28,8 @@ RETRIEVAL_EMPTY_COUNT = Counter(
 GENERATION_FAILURES = Counter(
     "rag_generation_failures_total", "Total generation failures"
 )
+
+INGEST_FAILURES = Counter("rag_ingest_failures_total", "Total ingestion failures")
 
 PROMPT_TOKENS = Counter("rag_tokens_prompt_total", "Tokens sent to LLM")
 COMPLETION_TOKENS = Counter("rag_tokens_completion_total", "Tokens received from LLM")
@@ -66,10 +68,15 @@ class QueryResponse(BaseModel):
 def ingest(request: IngestRequest) -> IngestResponse:
     """..."""
     INGEST_COUNT.inc()
-    with INGEST_LATENCY.time():
-        rag.ingest(request.text, request.metadata)
-    logger.info(f"Document ingested: {request.text[:30]}...")
-    return IngestResponse(status="ok")
+    try:
+        with INGEST_LATENCY.time():
+            rag.ingest(request.text, request.metadata)
+        logger.info(f"Document ingested: {request.text[:30]}...")
+        return IngestResponse(status="ok")
+    except Exception as e:
+        logger.error(f"Ingestion Failed {e}")
+        INGEST_FAILURES.inc()
+        raise HTTPException(status_code=500, detail=f"Ingestion failed: {str(e)}")
 
 
 @app.post("/query/")
@@ -92,9 +99,7 @@ def query(request: QueryRequest) -> QueryResponse:
     except Exception as e:
         logger.error(f"Generation failed: {e}")
         GENERATION_FAILURES.inc()
-        return QueryResponse(
-            answer="An error occurred during generation.",
-        )
+        raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
 
     logger.info(f"Query answered: {request.question[:30]}...")
     return QueryResponse(

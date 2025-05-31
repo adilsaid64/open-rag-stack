@@ -2,6 +2,6 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: "rag_api"
+  - job_name: "rag-orchestrator"
     static_configs:
       - targets: ["rag-orchestrator:8000"]

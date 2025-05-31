@@ -1,0 +1,167 @@
+{
+    "id": null,
+    "title": "RAG Stack Overview",
+    "tags": [
+        "RAG",
+        "LLMOps"
+    ],
+    "timezone": "browser",
+    "schemaVersion": 37,
+    "version": 1,
+    "refresh": "5s",
+    "panels": [
+        {
+            "type": "stat",
+            "title": "Total Queries",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rag_query_count_total",
+                    "format": "time_series"
+                }
+            ],
+            "gridPos": {
+                "x": 0,
+                "y": 0,
+                "w": 6,
+                "h": 4
+            }
+        },
+        {
+            "type": "stat",
+            "title": "Total Ingests",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rag_ingest_count_total",
+                    "format": "time_series"
+                }
+            ],
+            "gridPos": {
+                "x": 6,
+                "y": 0,
+                "w": 6,
+                "h": 4
+            }
+        },
+        {
+            "type": "graph",
+            "title": "Retrieval Latency",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rate(rag_retrieval_latency_seconds_sum[1m]) / rate(rag_retrieval_latency_seconds_count[1m])",
+                    "legendFormat": "Latency"
+                }
+            ],
+            "gridPos": {
+                "x": 0,
+                "y": 4,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "type": "graph",
+            "title": "Generation Latency",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rate(rag_generation_latency_seconds_sum[1m]) / rate(rag_generation_latency_seconds_count[1m])",
+                    "legendFormat": "Latency"
+                }
+            ],
+            "gridPos": {
+                "x": 0,
+                "y": 10,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "type": "stat",
+            "title": "Empty Retrievals",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rag_retrieval_empty_count_total",
+                    "format": "time_series"
+                }
+            ],
+            "gridPos": {
+                "x": 0,
+                "y": 16,
+                "w": 4,
+                "h": 4
+            }
+        },
+        {
+            "type": "stat",
+            "title": "Generation Failures",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rag_generation_failures_total",
+                    "format": "time_series"
+                }
+            ],
+            "gridPos": {
+                "x": 4,
+                "y": 16,
+                "w": 4,
+                "h": 4
+            }
+        },
+        {
+            "type": "stat",
+            "title": "Ingestion Failures",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rag_ingest_failures_total",
+                    "format": "time_series"
+                }
+            ],
+            "gridPos": {
+                "x": 8,
+                "y": 16,
+                "w": 4,
+                "h": 4
+            }
+        },
+        {
+            "type": "graph",
+            "title": "Prompt Tokens Over Time",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rate(rag_tokens_prompt_total[1m])",
+                    "legendFormat": "Prompt Tokens"
+                }
+            ],
+            "gridPos": {
+                "x": 0,
+                "y": 20,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "type": "graph",
+            "title": "Completion Tokens Over Time",
+            "datasource": "Prometheus",
+            "targets": [
+                {
+                    "expr": "rate(rag_tokens_completion_total[1m])",
+                    "legendFormat": "Completion Tokens"
+                }
+            ],
+            "gridPos": {
+                "x": 0,
+                "y": 26,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ]
+}
