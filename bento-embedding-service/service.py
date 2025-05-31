@@ -1,11 +1,14 @@
 import bentoml
 from sentence_transformers import SentenceTransformer
 
+
 class EmbedRequest(bentoml.IODescriptor):
     text: str
-    
+
+
 class EmbedResponse(bentoml.IODescriptor):
     embedding: list[float]
+
 
 @bentoml.service(resources={"cpu": "1"})
 class EmbeddingService:

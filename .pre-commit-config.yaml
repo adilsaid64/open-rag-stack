@@ -3,4 +3,18 @@ repos:
     rev: v0.4.1
     hooks:
       - id: ruff
-        args: ["--fix"]
+        args: ["--fix"]  # handles both linting and formatting
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer        # ensures newline at EOF
+      - id: trailing-whitespace      # removes trailing spaces
+      - id: check-added-large-files  # prevents accidentally committing large binaries
+      - id: check-merge-conflict     # detects unresolved git conflicts
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        args: ["--line-length=88"]

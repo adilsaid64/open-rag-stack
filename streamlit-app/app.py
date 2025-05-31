@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import json
 import re
 from collections import Counter
 from typing import Optional, Any
@@ -15,12 +14,14 @@ API_URL: str = "http://api:8000"
 
 
 def extract_keywords(text: str, top_n: int = 3) -> list[str]:
-    words = re.findall(r'\b\w{4,}\b', text.lower())
+    words = re.findall(r"\b\w{4,}\b", text.lower())
     common = Counter(words).most_common(top_n)
     return [word for word, _ in common]
 
 
-def post_json(endpoint: str, payload: dict[str, Any]) -> tuple[Optional[dict[str, Any]], Optional[str]]:
+def post_json(
+    endpoint: str, payload: dict[str, Any]
+) -> tuple[Optional[dict[str, Any]], Optional[str]]:
     try:
         resp = requests.post(f"{API_URL}{endpoint}", json=payload)
         resp.raise_for_status()
@@ -40,7 +41,9 @@ def ingest_section() -> None:
             title: str = col1.text_input("Title")
             author: str = col2.text_input("Author")
             auto_tags: bool = st.checkbox("Auto-generate tags from content", value=True)
-            manual_tags: str = st.text_input("Additional Tags (comma-separated)", placeholder="e.g. finance, NLP")
+            manual_tags: str = st.text_input(
+                "Additional Tags (comma-separated)", placeholder="e.g. finance, NLP"
+            )
 
         submitted: bool = st.form_submit_button("🚀 Ingest Document")
 
@@ -73,7 +76,6 @@ def ingest_section() -> None:
                 st.json(response)
 
 
-
 def query_section() -> None:
     st.subheader("❓ Ask a Question")
 
@@ -94,7 +96,11 @@ def query_section() -> None:
                 st.error(f"❌ Query failed: {error}")
             else:
                 st.markdown("### ✅ Answer")
-                st.success(response.get("answer", "No answer returned") if response is not None else "Response is None")
+                st.success(
+                    response.get("answer", "No answer returned")
+                    if response is not None
+                    else "Response is None"
+                )
 
 
 def main() -> None:

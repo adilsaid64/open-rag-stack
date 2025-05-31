@@ -14,36 +14,53 @@ rag = RAGPipeline()
 QUERY_COUNT = Counter("rag_query_count", "Total number of /query calls")
 INGEST_COUNT = Counter("rag_ingest_count", "Total number of /ingest calls")
 
-RETRIEVAL_LATENCY = Histogram("rag_retrieval_latency_seconds", "Time to retrieve context")
-GENERATION_LATENCY = Histogram("rag_generation_latency_seconds", "Time to generate response")
+RETRIEVAL_LATENCY = Histogram(
+    "rag_retrieval_latency_seconds", "Time to retrieve context"
+)
+GENERATION_LATENCY = Histogram(
+    "rag_generation_latency_seconds", "Time to generate response"
+)
 INGEST_LATENCY = Histogram("rag_ingest_latency_seconds", "Time to ingest documents")
 
-RETRIEVAL_EMPTY_COUNT = Counter("rag_retrieval_empty_count", "Retrieval returned no results")
-GENERATION_FAILURES = Counter("rag_generation_failures_total", "Total generation failures")
+RETRIEVAL_EMPTY_COUNT = Counter(
+    "rag_retrieval_empty_count", "Retrieval returned no results"
+)
+GENERATION_FAILURES = Counter(
+    "rag_generation_failures_total", "Total generation failures"
+)
 
 PROMPT_TOKENS = Counter("rag_tokens_prompt_total", "Tokens sent to LLM")
 COMPLETION_TOKENS = Counter("rag_tokens_completion_total", "Tokens received from LLM")
 
-GENERATION_MODEL = "EleutherAI/gpt-neo-1.3B"  
+GENERATION_MODEL = "EleutherAI/gpt-neo-1.3B"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+
 
 class IngestRequest(BaseModel):
     """..."""
+
     text: str
     metadata: Optional[dict] = None
 
+
 class IngestResponse(BaseModel):
     """..."""
+
     status: str
+
 
 class QueryRequest(BaseModel):
     """..."""
+
     question: str
     top_k: int = 3
 
+
 class QueryResponse(BaseModel):
     """..."""
+
     answer: str
+
 
 @app.post("/ingest/")
 def ingest(request: IngestRequest) -> IngestResponse:
@@ -53,6 +70,7 @@ def ingest(request: IngestRequest) -> IngestResponse:
         rag.ingest(request.text, request.metadata)
     logger.info(f"Document ingested: {request.text[:30]}...")
     return IngestResponse(status="ok")
+
 
 @app.post("/query/")
 def query(request: QueryRequest) -> QueryResponse:
@@ -82,6 +100,7 @@ def query(request: QueryRequest) -> QueryResponse:
     return QueryResponse(
         answer=answer,
     )
+
 
 @app.get("/metrics")
 def metrics():
