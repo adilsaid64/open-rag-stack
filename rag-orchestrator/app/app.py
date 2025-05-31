@@ -42,6 +42,7 @@ class QueryRequest(BaseModel):
     top_k: int = 3
 
 class QueryResponse(BaseModel):
+    """..."""
     answer: str
 
 @app.post("/ingest/")
