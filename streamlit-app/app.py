@@ -40,10 +40,6 @@ def ingest_section() -> None:
             col1, col2 = st.columns(2)
             title: str = col1.text_input("Title")
             author: str = col2.text_input("Author")
-            auto_tags: bool = st.checkbox("Auto-generate tags from content", value=True)
-            manual_tags: str = st.text_input(
-                "Additional Tags (comma-separated)", placeholder="e.g. finance, NLP"
-            )
 
         submitted: bool = st.form_submit_button("🚀 Ingest Document")
 
@@ -52,14 +48,9 @@ def ingest_section() -> None:
                 st.warning("Please enter some text to ingest.")
                 return
 
-            tags: list[str] = extract_keywords(text) if auto_tags else []
-            if manual_tags:
-                tags += [tag.strip() for tag in manual_tags.split(",") if tag.strip()]
-
             metadata: dict[str, Any] = {
                 "title": title,
                 "author": author,
-                "tags": tags,
             }
 
             payload: dict[str, Any] = {

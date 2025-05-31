@@ -12,7 +12,7 @@ from .config import (
     BENTOML_MODEL_URL,
     BENTOML_EMBEDDING_URL,
 )
-from .utils import logger
+from .utils import logger, chunk_text, auto_tag
 
 
 class RAGPipeline:
@@ -61,6 +61,32 @@ class RAGPipeline:
         )
         self.qdrant.upsert(collection_name=self.collection_name, points=[point])
         logger.info(f"Ingested document into {self.collection_name}")
+
+    def split_and_ingest(
+        self,
+        text: str,
+        source: str = "unknown",
+        metadata: Optional[dict] = None,
+        chunk_size: int = 200,
+        overlap: int = 20,
+        top_n_tags: int = 3,
+    ):
+        chunks = chunk_text(text, chunk_size=chunk_size, overlap=overlap)
+        tags = auto_tag(text, top_n=top_n_tags)
+        doc_id = str(uuid.uuid4())
+        base_metadata = metadata or {}
+
+        for i, chunk in enumerate(chunks):
+            chunk_metadata = {
+                "source": source,
+                "chunk_id": i,
+                "doc_id": doc_id,
+                "tags": tags,
+                **base_metadata,
+            }
+            self.ingest(chunk, metadata=chunk_metadata)
+
+        logger.info(f"Split and ingested {len(chunks)} chunks from source: {source}")
 
     def retrieve(self, query: str, top_k: int = 3):
         embedding = self.get_embedding(query)

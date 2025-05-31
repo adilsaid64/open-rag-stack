@@ -70,7 +70,15 @@ def ingest(request: IngestRequest) -> IngestResponse:
     INGEST_COUNT.inc()
     try:
         with INGEST_LATENCY.time():
-            rag.ingest(request.text, request.metadata)
+            rag.split_and_ingest(
+                text=request.text,
+                source=(
+                    request.metadata.get("title", "unknown")
+                    if request.metadata
+                    else "unknown"
+                ),
+                metadata=request.metadata,
+            )
         logger.info(f"Document ingested: {request.text[:30]}...")
         return IngestResponse(status="ok")
     except Exception as e:
