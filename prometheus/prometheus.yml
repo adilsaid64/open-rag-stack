@@ -5,3 +5,11 @@ scrape_configs:
   - job_name: "rag-orchestrator"
     static_configs:
       - targets: ["rag-orchestrator:8000"]
+
+  - job_name: "bentoml-model"
+    static_configs:
+      - targets: ["bentoml-model:3000"]
+
+  - job_name: "bentoml-embedding"
+    static_configs:
+      - targets: ["bentoml-embedding:3001"]
