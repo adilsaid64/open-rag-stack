@@ -4,7 +4,6 @@ from fastapi import FastAPI
 from fastapi.responses import Response
 from pydantic import BaseModel
 from prometheus_client import Counter, Histogram, generate_latest
-import uvicorn
 
 from src.rag import RAGPipeline
 from src.utils import logger
@@ -88,5 +87,5 @@ def metrics():
     """..."""
     return Response(generate_latest(), media_type="text/plain")
 
-if __name__ == "__main__":
-    uvicorn.run(app="app:app", host="0.0.0.0", port=8000, log_level="info")
+# if __name__ == "__main__":
+#     uvicorn.run(app="app:app", host="0.0.0.0", port=8000, log_level="info")

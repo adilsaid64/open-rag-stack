@@ -1,8 +1,22 @@
 ## What is this?
 
-A **playground** for building and serving **Retrieval-Augmented Generation (RAG)** systems.
+A **playground** for building and serving **Retrieval-Augmented Generation (RAG)** systems — with production in mind.
 
 ## Why?
 
-This project is an exploration of **MLOps** and **LLMOps** best practices — with a focus on building, deploying, and experimenting with RAG systems.
+To explore and apply best practices in **MLOps** and **LLMOps**, specifically around deploying modular, observable, and scalable RAG systems.
 
+## What's Included?
+
+- **FastAPI** orchestrator with `/ingest` and `/query` endpoints
+- **BentoML** services for embeddings and generation
+- **Qdrant** as the vector database for retrieval
+- **MLflow** for experiment tracking
+- **Prometheus** for monitoring core RAG metrics
+- **Streamlit** app to interact with the system
+
+## Goals
+
+- Apply real-world deployment principles to RAG
+- Track and monitor performance with Prometheus
+- Structure services for modularity and scaling
