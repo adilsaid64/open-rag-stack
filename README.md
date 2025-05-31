@@ -8,6 +8,9 @@ To explore and apply best practices in **MLOps** and **LLMOps**, specifically ar
 
 ## What's Included?
 
+
+![rag-system](assests/rag-system.drawio.png)
+
 - **FastAPI** orchestrator with `/ingest` and `/query` endpoints
 - **BentoML** services for embeddings and generation
 - **Qdrant** as the vector database for retrieval
@@ -15,6 +18,7 @@ To explore and apply best practices in **MLOps** and **LLMOps**, specifically ar
 - **Prometheus** for monitoring core RAG metrics and model endpoints
 - **Grafana** for visualising scraped metrics
 - **Streamlit** app to interact with the system
+- **MongoDB** for tracking user interaction and model outputs for model evaluation
 
 ## Goals
 

@@ -4,11 +4,13 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
 from prometheus_client import Counter, Histogram, generate_latest
 from pydantic import BaseModel
+from src.mongo_logger import MongoLogger
 from src.rag import RAGPipeline
 from src.utils import logger
 
 app = FastAPI(title="RAG API", description="Retrieval-Augmented Generation API")
 rag = RAGPipeline()
+mongo_logger = MongoLogger()
 
 QUERY_COUNT = Counter("rag_query_count", "Total number of /query calls")
 INGEST_COUNT = Counter("rag_ingest_count", "Total number of /ingest calls")
@@ -97,11 +99,11 @@ def query(request: QueryRequest) -> QueryResponse:
     if not contexts:
         RETRIEVAL_EMPTY_COUNT.inc()
 
-    context = "\n".join([hit["text"] for hit in contexts])
+    context_text = "\n".join([hit["text"] for hit in contexts])
 
     try:
         with GENERATION_LATENCY.time():
-            answer = rag.generate(request.question, context)
+            answer = rag.generate(request.question, context_text)
 
     except Exception as e:
         logger.error(f"Generation failed: {e}")
@@ -109,6 +111,13 @@ def query(request: QueryRequest) -> QueryResponse:
         raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
 
     logger.info(f"Query answered: {request.question[:30]}...")
+
+    mongo_logger.log_request(
+        request=request,
+        contexts=contexts,
+        answer=answer,
+    )
+
     return QueryResponse(
         answer=answer,
     )
