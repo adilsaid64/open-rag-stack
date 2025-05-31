@@ -8,3 +8,7 @@ dependencies = [
     "pre-commit>=4.2.0",
     "ruff>=0.11.12",
 ]
+
+[tool.ruff]
+extend-select = ["I"]
+line-length = 88

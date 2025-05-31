@@ -2,9 +2,8 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
-from pydantic import BaseModel
 from prometheus_client import Counter, Histogram, generate_latest
-
+from pydantic import BaseModel
 from src.rag import RAGPipeline
 from src.utils import logger
 

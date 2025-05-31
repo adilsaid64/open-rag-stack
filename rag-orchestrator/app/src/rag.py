@@ -1,18 +1,17 @@
-import requests
 import uuid
 from typing import Optional
 
+import requests
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import PointStruct
-from qdrant_client.http.models import VectorParams, Distance
+from qdrant_client.http.models import Distance, PointStruct, VectorParams
 
 from .config import (
-    QDRANT_URL,
-    COLLECTION_NAME,
-    BENTOML_MODEL_URL,
     BENTOML_EMBEDDING_URL,
+    BENTOML_MODEL_URL,
+    COLLECTION_NAME,
+    QDRANT_URL,
 )
-from .utils import logger, chunk_text, auto_tag
+from .utils import auto_tag, chunk_text, logger
 
 
 class RAGPipeline:

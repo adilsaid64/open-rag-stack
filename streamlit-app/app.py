@@ -1,8 +1,9 @@
-import streamlit as st
-import requests
 import re
 from collections import Counter
-from typing import Optional, Any
+from typing import Any, Optional
+
+import requests
+import streamlit as st
 
 st.set_page_config(
     page_title="RAG Demo",

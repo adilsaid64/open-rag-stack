@@ -1,6 +1,6 @@
 import logging
-from collections import Counter
 import re
+from collections import Counter
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"

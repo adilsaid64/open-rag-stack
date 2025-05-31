@@ -1,5 +1,5 @@
 import bentoml
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 class GenerateRequest(bentoml.IODescriptor):
