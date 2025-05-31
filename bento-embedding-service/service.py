@@ -1,12 +1,13 @@
 import bentoml
+from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 
 
-class EmbedRequest(bentoml.IODescriptor):
+class EmbedRequest(BaseModel):
     text: str
 
 
-class EmbedResponse(bentoml.IODescriptor):
+class EmbedResponse(BaseModel):
     embedding: list[float]
 
 
@@ -15,7 +16,7 @@ class EmbeddingService:
     def __init__(self):
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    @bentoml.api(input_spec=EmbedRequest, output_spec=EmbedResponse)
+    @bentoml.api
     def embed(self, body: EmbedRequest) -> EmbedResponse:
         embedding = self.model.encode([body.text])[0].tolist()
         return EmbedResponse(embedding=embedding)

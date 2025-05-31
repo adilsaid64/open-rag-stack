@@ -47,7 +47,9 @@ class RAGPipeline:
             )
 
     def get_embedding(self, text: str):
-        response = requests.post(f"{self.embedding_url}/embed", json={"text": text})
+        response = requests.post(
+            f"{self.embedding_url}/embed", json={"body": {"text": text}}
+        )
         response.raise_for_status()
         return response.json()["embedding"]
 
@@ -107,9 +109,15 @@ class RAGPipeline:
         ]
 
     def generate(self, question: str, context: str):
-        prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
+        prompt = (
+            f"Answer the question based only on the context.\n\n"
+            f"Context: {context}\n"
+            f"Question: {question}\n"
+            f"Answer:"
+        )
         response = requests.post(
-            f"{self.model_url}/generate", json={"prompt": prompt, "max_tokens": 128}
+            f"{self.model_url}/generate",
+            json={"body": {"prompt": prompt, "max_tokens": 128}},
         )
         response.raise_for_status()
         return response.json().get("response", "")

@@ -1,13 +1,14 @@
 import bentoml
+from pydantic import BaseModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
-class GenerateRequest(bentoml.IODescriptor):
+class GenerateRequest(BaseModel):
     prompt: str
     max_tokens: int = 128
 
 
-class GenerateResponse(bentoml.IODescriptor):
+class GenerateResponse(BaseModel):
     response: str
 
 
@@ -18,7 +19,7 @@ class GenerationService:
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_id)
         self.model = AutoModelForCausalLM.from_pretrained(self.model_id)
 
-    @bentoml.api(input_spec=GenerateRequest, output_spec=GenerateResponse)
+    @bentoml.api
     def generate(self, body: GenerateRequest) -> GenerateResponse:
         inputs = self.tokenizer(body.prompt, return_tensors="pt")
         outputs = self.model.generate(

@@ -97,7 +97,7 @@ def query(request: QueryRequest) -> QueryResponse:
     if not contexts:
         RETRIEVAL_EMPTY_COUNT.inc()
 
-    context = "\n".join(contexts)
+    context = "\n".join([hit["text"] for hit in contexts])
 
     try:
         with GENERATION_LATENCY.time():
