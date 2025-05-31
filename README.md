@@ -12,7 +12,8 @@ To explore and apply best practices in **MLOps** and **LLMOps**, specifically ar
 - **BentoML** services for embeddings and generation
 - **Qdrant** as the vector database for retrieval
 - **MLflow** for experiment tracking
-- **Prometheus** for monitoring core RAG metrics
+- **Prometheus** for monitoring core RAG metrics and model endpoints
+- **Grafana** for visualising scraped metrics
 - **Streamlit** app to interact with the system
 
 ## Goals
