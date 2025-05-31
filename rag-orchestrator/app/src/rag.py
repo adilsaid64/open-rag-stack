@@ -93,7 +93,19 @@ class RAGPipeline:
         hits = self.qdrant.search(
             collection_name=self.collection_name, query_vector=embedding, limit=top_k
         )
-        return [hit.payload["text"] for hit in hits if hit.payload is not None]
+        return [
+            {
+                "text": hit.payload["text"],
+                "author": hit.payload.get("author"),
+                "source": hit.payload.get("source"),
+                "doc_id": hit.payload.get("doc_id"),
+                "chunk_id": hit.payload.get("chunk_id"),
+                "tags": hit.payload.get("tags"),
+                "score": hit.score,
+            }
+            for hit in hits
+            if hit.payload is not None
+        ]
 
     def generate(self, question: str, context: str):
         prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
@@ -104,7 +116,7 @@ class RAGPipeline:
         return response.json().get("response", "")
 
     def query(self, question: str, top_k: int = 3):
-        contexts = self.retrieve(question, top_k=top_k)
-        context = "\n".join(contexts)
+        hits = self.retrieve(question, top_k=top_k)
+        context = "\n".join([hit["text"] for hit in hits])
         answer = self.generate(question, context)
         return answer
