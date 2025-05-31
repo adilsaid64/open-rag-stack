@@ -58,20 +58,20 @@ services:
       - "3001:3001"
     depends_on:
       - mlflow
-  api:
-    build: ./api
+  rag-orchestrator:
+    build: ./rag-orchestrator
     ports:
       - "8000:8000"
     depends_on:
       - qdrant
     env_file:
-      - ./api/.env
+      - ./rag-orchestrator/.env
   streamlit-app:
     build: ./streamlit-app
     ports:
       - "8501:8501"
     depends_on:
-      - api
+      - rag-orchestrator
 
   prometheus:
     image: prom/prometheus
@@ -81,7 +81,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
-      - api
+      - rag-orchestrator
 
   grafana:
     image: grafana/grafana

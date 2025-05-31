@@ -4,4 +4,4 @@ global:
 scrape_configs:
   - job_name: "rag_api"
     static_configs:
-      - targets: ["api:8000"]
+      - targets: ["rag-orchestrator:8000"]
