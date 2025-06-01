@@ -1,11 +1,9 @@
-from typing import Optional
-
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
-from prometheus_client import Counter, Histogram, generate_latest
-from pydantic import BaseModel
+from prometheus_client import Counter, Histogram, Summary, generate_latest
 from src.mongo_logger import MongoLogger
 from src.rag import RAGPipeline
+from src.schema import IngestRequest, IngestResponse, QueryRequest, QueryResponse
 from src.utils import logger
 
 app = FastAPI(title="RAG API", description="Retrieval-Augmented Generation API")
@@ -32,37 +30,18 @@ GENERATION_FAILURES = Counter(
 
 INGEST_FAILURES = Counter("rag_ingest_failures_total", "Total ingestion failures")
 
-PROMPT_TOKENS = Counter("rag_tokens_prompt_total", "Tokens sent to LLM")
-COMPLETION_TOKENS = Counter("rag_tokens_completion_total", "Tokens received from LLM")
+CONTEXTS_RETRIEVED = Summary(
+    "rag_contexts_retrieved_count", "Number of contexts retrieved per query"
+)
+
+RETRIEVAL_SCORE = Histogram(
+    "rag_retrieval_score",
+    "Score of retrieved contexts",
+    buckets=[0.1, 0.3, 0.5, 0.7, 0.9, 1.0],
+)
 
 GENERATION_MODEL = "EleutherAI/gpt-neo-1.3B"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-
-
-class IngestRequest(BaseModel):
-    """..."""
-
-    text: str
-    metadata: Optional[dict] = None
-
-
-class IngestResponse(BaseModel):
-    """..."""
-
-    status: str
-
-
-class QueryRequest(BaseModel):
-    """..."""
-
-    question: str
-    top_k: int = 3
-
-
-class QueryResponse(BaseModel):
-    """..."""
-
-    answer: str
 
 
 @app.post("/ingest/")
@@ -98,6 +77,11 @@ def query(request: QueryRequest) -> QueryResponse:
 
     if not contexts:
         RETRIEVAL_EMPTY_COUNT.inc()
+
+    CONTEXTS_RETRIEVED.observe(len(contexts))
+
+    for hit in contexts:
+        RETRIEVAL_SCORE.observe(hit["score"])
 
     context_text = "\n".join([hit["text"] for hit in contexts])
 

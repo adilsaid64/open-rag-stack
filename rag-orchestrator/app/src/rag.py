@@ -105,7 +105,7 @@ class RAGPipeline:
                 "score": hit.score,
             }
             for hit in hits
-            if hit.payload is not None
+            if (hit.payload is not None) and (hit.score > 0.5)
         ]
 
     def generate(self, question: str, context: str):

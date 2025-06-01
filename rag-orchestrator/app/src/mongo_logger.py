@@ -1,16 +1,9 @@
 from datetime import datetime, timezone
 from typing import Any
 
-from pydantic import BaseModel
 from pymongo import MongoClient
 
-
-class RequestLog(BaseModel):
-    question: str
-    top_k: int
-    contexts: list[Any]
-    answer: str
-    timestamp: datetime
+from .schema import QueryRequest, RequestLog
 
 
 class MongoLogger:
@@ -20,7 +13,9 @@ class MongoLogger:
         self.client = MongoClient(uri)
         self.collection = self.client[db_name][collection]
 
-    def log_request(self, request, contexts, answer) -> None:
+    def log_request(
+        self, request: QueryRequest, contexts: list[dict[str, Any]], answer: str
+    ) -> None:
         log_entry = RequestLog(
             question=request.question,
             top_k=request.top_k,

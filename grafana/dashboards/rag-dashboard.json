@@ -1,167 +1,741 @@
 {
-    "id": null,
-    "title": "RAG Stack Overview",
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 2,
+    "links": [],
+    "panels": [
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 7,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rag_query_count_total",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Total Queries",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 7,
+                "x": 7,
+                "y": 0
+            },
+            "id": 2,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rag_ingest_count_total",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Total Ingests",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 0,
+                "y": 4
+            },
+            "id": 10,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rag_ingest_failures_total",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Ingestion Failures",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 5,
+                "y": 4
+            },
+            "id": 9,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rag_generation_failures_total",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Generation Failures",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 9,
+                "y": 4
+            },
+            "id": 8,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rag_retrieval_empty_count_total",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Empty Retrievals",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "points",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 14,
+                "x": 0,
+                "y": 8
+            },
+            "id": 3,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rate(rag_retrieval_latency_seconds_sum[1m]) / rate(rag_retrieval_latency_seconds_count[1m])",
+                    "legendFormat": "Latency",
+                    "refId": "A"
+                }
+            ],
+            "title": "Retrieval Latency",
+            "type": "timeseries"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "points",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 14,
+                "x": 0,
+                "y": 14
+            },
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rate(rag_generation_latency_seconds_sum[1m]) / rate(rag_generation_latency_seconds_count[1m])",
+                    "legendFormat": "Latency",
+                    "refId": "A"
+                }
+            ],
+            "title": "Generation Latency",
+            "type": "timeseries"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 0,
+                "y": 20
+            },
+            "id": 5,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rate(rag_retrieval_latency_seconds_sum[1m]) / rate(rag_retrieval_latency_seconds_count[1m])",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Avg Retrieval Latency",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 5,
+                "y": 20
+            },
+            "id": 7,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(rag_retrieval_score_bucket[1m])) by (le))",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "p95 Retrieval Score",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 9,
+                "y": 20
+            },
+            "id": 6,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rate(rag_generation_latency_seconds_sum[1m]) / rate(rag_generation_latency_seconds_count[1m])",
+                    "format": "time_series",
+                    "refId": "A"
+                }
+            ],
+            "title": "Avg Generation Latency",
+            "type": "stat"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "points",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green"
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 14,
+                "x": 0,
+                "y": 24
+            },
+            "id": 11,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.0.1",
+            "targets": [
+                {
+                    "expr": "rate(rag_contexts_retrieved_count_sum[1m]) / rate(rag_contexts_retrieved_count_count[1m])",
+                    "legendFormat": "Avg Contexts",
+                    "refId": "A"
+                }
+            ],
+            "title": "Contexts Retrieved per Query",
+            "type": "timeseries"
+        }
+    ],
+    "preload": false,
+    "refresh": "5s",
+    "schemaVersion": 41,
     "tags": [
         "RAG",
         "LLMOps"
     ],
+    "templating": {
+        "list": []
+    },
+    "timepicker": {},
     "timezone": "browser",
-    "schemaVersion": 37,
-    "version": 1,
-    "refresh": "5s",
-    "panels": [
-        {
-            "type": "stat",
-            "title": "Total Queries",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rag_query_count_total",
-                    "format": "time_series"
-                }
-            ],
-            "gridPos": {
-                "x": 0,
-                "y": 0,
-                "w": 6,
-                "h": 4
-            }
-        },
-        {
-            "type": "stat",
-            "title": "Total Ingests",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rag_ingest_count_total",
-                    "format": "time_series"
-                }
-            ],
-            "gridPos": {
-                "x": 6,
-                "y": 0,
-                "w": 6,
-                "h": 4
-            }
-        },
-        {
-            "type": "graph",
-            "title": "Retrieval Latency",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rate(rag_retrieval_latency_seconds_sum[1m]) / rate(rag_retrieval_latency_seconds_count[1m])",
-                    "legendFormat": "Latency"
-                }
-            ],
-            "gridPos": {
-                "x": 0,
-                "y": 4,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "graph",
-            "title": "Generation Latency",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rate(rag_generation_latency_seconds_sum[1m]) / rate(rag_generation_latency_seconds_count[1m])",
-                    "legendFormat": "Latency"
-                }
-            ],
-            "gridPos": {
-                "x": 0,
-                "y": 10,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "stat",
-            "title": "Empty Retrievals",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rag_retrieval_empty_count_total",
-                    "format": "time_series"
-                }
-            ],
-            "gridPos": {
-                "x": 0,
-                "y": 16,
-                "w": 4,
-                "h": 4
-            }
-        },
-        {
-            "type": "stat",
-            "title": "Generation Failures",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rag_generation_failures_total",
-                    "format": "time_series"
-                }
-            ],
-            "gridPos": {
-                "x": 4,
-                "y": 16,
-                "w": 4,
-                "h": 4
-            }
-        },
-        {
-            "type": "stat",
-            "title": "Ingestion Failures",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rag_ingest_failures_total",
-                    "format": "time_series"
-                }
-            ],
-            "gridPos": {
-                "x": 8,
-                "y": 16,
-                "w": 4,
-                "h": 4
-            }
-        },
-        {
-            "type": "graph",
-            "title": "Prompt Tokens Over Time",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rate(rag_tokens_prompt_total[1m])",
-                    "legendFormat": "Prompt Tokens"
-                }
-            ],
-            "gridPos": {
-                "x": 0,
-                "y": 20,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "graph",
-            "title": "Completion Tokens Over Time",
-            "datasource": "Prometheus",
-            "targets": [
-                {
-                    "expr": "rate(rag_tokens_completion_total[1m])",
-                    "legendFormat": "Completion Tokens"
-                }
-            ],
-            "gridPos": {
-                "x": 0,
-                "y": 26,
-                "w": 12,
-                "h": 6
-            }
-        }
-    ]
+    "title": "RAG Stack Overview",
+    "uid": "0028f832-1b71-4a5c-9f47-78003c643fd4",
+    "version": 15
 }
