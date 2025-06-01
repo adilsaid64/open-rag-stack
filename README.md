@@ -9,7 +9,7 @@ To explore and apply best practices in **MLOps** and **LLMOps**, specifically ar
 ## What's Included?
 
 
-![rag-system](assests/rag-system.drawio.png)
+![rag-system](assets/rag-system.drawio.png)
 
 - **FastAPI** orchestrator with `/ingest` and `/query` endpoints
 - **BentoML** services for embeddings and generation
