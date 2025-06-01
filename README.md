@@ -114,3 +114,11 @@ Once the services are running, you can interact with the system through the foll
 | **Prometheus**    | [http://localhost:9090](http://localhost:9090) | View raw metrics from services                 |
 | **Mongo Express** | [http://localhost:8081](http://localhost:8081) | Inspect stored user interactions and outputs   |
 | **MLflow UI**     | [http://localhost:5000](http://localhost:5000) | Track experiments, artifacts, and metrics      |
+
+## What I would change
+
+This system is orchestrated with Docker Compose for simplicity. However, in a real production environment, I would probably deploy it to a Kubernetes cluster. And because this was just a side project to explore RAG architecture and MLOps/LLMOps principles regarding RAG, I didn't want to deal with Kubernetes. But as everything is containerised, deploying this to a Kubernetes cluster shouldn’t be too much work.
+
+I would also add better authentication and security with how access keys and passwords are defined. Ideally, these would be stored and retrieved from a secret manager somewhere.
+
+Regarding MLOps/LLMOps, the current implementation doesn’t track model versioning. The models are defined within the BentoML services. Ideally, these models should be registered in MLflow’s model registry, and then BentoML uses MLflow’s model registry to build the model servers.
