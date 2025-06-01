@@ -48,6 +48,10 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 def ingest(request: IngestRequest) -> IngestResponse:
     """..."""
     INGEST_COUNT.inc()
+
+    # save and commit data to lakefs, then use the commit hash as metadata when storing embeddings
+    # this way we can relate embeddings with model versions
+
     try:
         with INGEST_LATENCY.time():
             rag.split_and_ingest(

@@ -62,7 +62,6 @@ It can also be extended to include the metrics provided from the BentoML endpoin
 
 All components are containerised with Docker and orchestrated using Docker Compose.
 
-
 Run
 
 ```bash
@@ -71,36 +70,28 @@ docker-compose up --build
 
 The BentoML services can take some time to spin up.
 
-Then we need to setup MinIO as an artifact store for MLflow.
+We need to setup LakeFS as an artifact store for our documents.
 
-1. **Access the MinIO UI**
-   Visit [http://localhost:9001](http://localhost:9001) in your browser.
+1. **Access the LakeFS UI**
+   Visit [http://localhost:8001/](http://localhost:8001/) in your browser.
 
-2. **Create a Bucket**
-   After logging in, create a new bucket named: `mlflow`
+2. **Create a an Account and Store Credentials**
 
-3. **Create a User Account**
-   Inside the MinIO UI, create a user account and note the credentials:
+   ![LakeFS Credentials](assets/lakefs-setup-1.png)
 
-   * `AWS_ACCESS_KEY_ID`
-   * `AWS_SECRET_ACCESS_KEY`
+   Make sure not to lose these credentials. Store them in the `.env ` of the `rag-orchestrator`
 
-4. **Configure MLflow in `docker-compose.yaml`**
-   Update the MLflow service environment variables in your `docker-compose.yaml` file:
-
-   ```yaml
-   environment:
-     AWS_ACCESS_KEY_ID: <your-access-key>
-     AWS_SECRET_ACCESS_KEY: <your-secret-key>
+   ```
+   LAKEFS_USERNAME=<your-access-key>
+   LAKEFS_PASSWORD=<your-secret-key>
    ```
 
-   This allows MLflow to store and retrieve artifacts from MinIO.
+3. **Create a LakeFS Repo**
 
-Rebuild MLflow:
+   Inside the LakeFS UI, create a repo to store our documents in:
 
-```bash
-  docker compose up -d --build mlflow
-```
+   ![LakeFS Repo](assets/lakefs-setup-2.png)
+
 
 ## Accessing the Interfaces
 
@@ -114,6 +105,8 @@ Once the services are running, you can interact with the system through the foll
 | **Prometheus**    | [http://localhost:9090](http://localhost:9090) | View raw metrics from services                 |
 | **Mongo Express** | [http://localhost:8081](http://localhost:8081) | Inspect stored user interactions and outputs   |
 | **MLflow UI**     | [http://localhost:5000](http://localhost:5000) | Track experiments, artifacts, and metrics      |
+| **LakeFS UI**     | [http://localhost:8001](http://localhost:8001) | Manage versioned data and artifacts            |
+
 
 ## What I Would Change
 

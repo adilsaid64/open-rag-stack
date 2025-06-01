@@ -6,19 +6,17 @@ services:
       - "6333:6333"
     volumes:
       - ./qdrant_data:/qdrant/storage
-
-  mysql:
-    image: mysql:8
+  postgres:
+    image: postgres:15
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mlflow
-      MYSQL_USER: mlflow
-      MYSQL_PASSWORD: mlflow
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - pg_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
 
   minio:
     image: minio/minio
@@ -36,14 +34,15 @@ services:
     build:
       context: ./mlflow-server
     environment:
-      AWS_ACCESS_KEY_ID: q63Oq77uflrb5Q0VuBKJ
-      AWS_SECRET_ACCESS_KEY: kV3UFQeqxV7kMMGPo5B8abdMopjPPE2cO6Ccc1B9
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
       MLFLOW_S3_ENDPOINT_URL: http://minio:9000
     ports:
       - "5000:5000"
     depends_on:
-      - mysql
+      - postgres
       - minio
+      - minio-init
 
   bentoml-model:
     build: ./bento-model-service
@@ -114,8 +113,38 @@ services:
     depends_on:
       - mongo
 
+  lakefs:
+    image: treeverse/lakefs
+    ports:
+      - "8001:8000"
+    environment:
+      LAKEFS_DATABASE_TYPE: postgres
+      LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING: postgres://admin:admin@postgres:5432/lakefs?sslmode=disable
+      LAKEFS_BLOCKSTORE_TYPE: s3
+      LAKEFS_BLOCKSTORE_S3_FORCE_PATH_STYLE: true
+      LAKEFS_BLOCKSTORE_S3_ENDPOINT: http://minio:9000
+      LAKEFS_BLOCKSTORE_S3_CREDENTIALS_ACCESS_KEY_ID: minioadmin
+      LAKEFS_BLOCKSTORE_S3_CREDENTIALS_SECRET_ACCESS_KEY: minioadmin
+      LAKEFS_AUTH_ENCRYPT_SECRET_KEY: supersecretkeymustbe32bytes!
+    depends_on:
+      - minio
+      - postgres
+      - minio-init
+  minio-init:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        sleep 5;
+        mc alias set local http://minio:9000 minioadmin minioadmin;
+        mc mb -p local/mlflow;
+        mc mb -p local/lakefs;
+        echo 'MinIO buckets initialized';
+      "
+
 volumes:
-  mysql_data:
+  pg_data:
   minio_data:
   grafana_data:
   mongo_data:

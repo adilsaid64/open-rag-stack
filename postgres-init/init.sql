@@ -1,0 +1,2 @@
+CREATE DATABASE lakefs;
+CREATE DATABASE mlflow;
