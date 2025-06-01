@@ -19,6 +19,13 @@ Designed to explore and apply best practices in **MLOps** and **LLMOps**, focusi
 - **Grafana** for visualising scraped metrics
 - **Streamlit** app to interact with the system
 - **MongoDB** for tracking user interaction and model outputs for model evaluation
+- **LakeFS** for versioning ingested documents and storing commit hashes alongside embeddings to ensure traceability between source data and vectors
+
+## Data Versioning
+
+To ensure traceability and reproducibility, all ingested documents are versioned using LakeFS. When a document is ingested, it is committed to a LakeFS repository, and the resulting commit hash is saved alongside the document's embeddings in Qdrant.
+
+This means every embedding can be traced back to the exact version of the document it was generated from. If documents are updated, a new commit is created — allowing you to track changes over time and maintain alignment between the vector store and source data.
 
 ## Evaluation
 
