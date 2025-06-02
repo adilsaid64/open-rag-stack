@@ -117,6 +117,9 @@ Once the services are running, you can interact with the system through the foll
 
 ## What I Would Change
 
+Right now, the system follows a synchronous orchestration pattern using FastAPI and HTTP between services. 
+I would at some point like to explore an event-driven design by introducing a message broker and having services publish/consume events asynchronously (maybe that would be the next project).
+
 This system is orchestrated with Docker Compose for simplicity. However, in a real production environment, I would probably deploy it to a Kubernetes cluster. And because this was just a side project to explore RAG architecture and MLOps/LLMOps principles regarding RAG, I didn't want to deal with Kubernetes. But as everything is containerised, deploying this to a Kubernetes cluster shouldn’t be too much work.
 
 I would also add better authentication and security with how access keys and passwords are defined. Ideally, these would be stored and retrieved from a secret manager somewhere.
