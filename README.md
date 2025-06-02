@@ -1,6 +1,6 @@
 ## What is this?
 
-A **production-oriented** playground for building and serving **Retrieval-Augmented Generation0 (RAG)** systems.
+A **production-oriented** playground for building and serving **Retrieval-Augmented Generation (RAG)** systems.
 
 ## Why?
 
