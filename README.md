@@ -2,6 +2,8 @@
 
 A **production-oriented** playground for building and serving **Retrieval-Augmented Generation (RAG)** systems.
 
+See article here: [Medium](https://medium.com/@adilsaid64/rag-in-practice-exploring-versioning-observability-and-evaluation-in-production-systems-85dc28e1d9a8)
+
 ## Why?
 
 Designed to explore and apply best practices in **MLOps** and **LLMOps**, focusing on modular, observable, and scalable RAG system deployment.
