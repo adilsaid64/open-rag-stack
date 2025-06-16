@@ -5,16 +5,17 @@ from pydantic import BaseModel
 
 
 class IngestRequest(BaseModel):
-    """..."""
+    """Request model for ingesting documents"""
 
     text: str
     metadata: Optional[dict] = None
 
 
 class IngestResponse(BaseModel):
-    """..."""
+    """Response model for document ingestion"""
 
     status: str
+    metadata: Optional[dict] = None
 
 
 class QueryRequest(BaseModel):

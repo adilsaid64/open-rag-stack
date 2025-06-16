@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115.12",
+    "lakefs>=0.11.1",
     "prometheus-client>=0.22.0",
     "pydantic>=2.11.5",
     "pymongo>=4.13.0",

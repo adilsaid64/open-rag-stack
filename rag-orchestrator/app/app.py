@@ -1,6 +1,9 @@
+import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
 from prometheus_client import Counter, Histogram, Summary, generate_latest
+from src.lakefs_store import LakeFSLogger
 from src.mongo_logger import MongoLogger
 from src.rag import RAGPipeline
 from src.schema import IngestRequest, IngestResponse, QueryRequest, QueryResponse
@@ -9,6 +12,13 @@ from src.utils import logger
 app = FastAPI(title="RAG API", description="Retrieval-Augmented Generation API")
 rag = RAGPipeline()
 mongo_logger = MongoLogger()
+
+lakefs_logger = LakeFSLogger(
+    lakefs_endpoint=os.getenv("LAKEFS_ENDPOINT", "http://localhost:8000"),
+    lakefs_username=os.getenv("LAKEFS_USERNAME", "LAKEFS_USERNAME"),
+    lakefs_password=os.getenv("LAKEFS_PASSWORD", "LAKEFS_PASSWORD"),
+    lakefs_repo=os.getenv("LAKEFS_REPO", "documents"),
+)
 
 QUERY_COUNT = Counter("rag_query_count", "Total number of /query calls")
 INGEST_COUNT = Counter("rag_ingest_count", "Total number of /ingest calls")
@@ -46,25 +56,25 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 @app.post("/ingest/")
 def ingest(request: IngestRequest) -> IngestResponse:
-    """..."""
+    """Ingest a text passage into the RAG system and store it in LakeFS"""
     INGEST_COUNT.inc()
 
-    # save and commit data to lakefs, then use the commit hash as metadata when storing embeddings
-    # this way we can relate embeddings with model versions
-
     try:
+        commit_hash = lakefs_logger.store_text(request.text)
+
+        metadata = request.metadata or {}
+        metadata["lakefs_commit"] = commit_hash
+
         with INGEST_LATENCY.time():
             rag.split_and_ingest(
                 text=request.text,
-                source=(
-                    request.metadata.get("title", "unknown")
-                    if request.metadata
-                    else "unknown"
-                ),
-                metadata=request.metadata,
+                source=metadata.get("title", "unknown"),
+                metadata=metadata,
             )
-        logger.info(f"Document ingested: {request.text[:30]}...")
-        return IngestResponse(status="ok")
+        logger.info(
+            f"Text passage ingested with commit hash {commit_hash}: {request.text[:30]}..."
+        )
+        return IngestResponse(status="ok", metadata={"lakefs_commit": commit_hash})
     except Exception as e:
         logger.error(f"Ingestion Failed {e}")
         INGEST_FAILURES.inc()
